@@ -14,6 +14,7 @@ T-Shirt app is an application that a user can:
 ## Technologies
 * Python 3.10
 ## Setup/Installation Requirements
+* Install Python
 * Download Project or:
   - Code/Download  Zip
 * Clone Project:
