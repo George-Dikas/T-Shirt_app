@@ -1,70 +1,70 @@
-### BUCKETSORT ALGORITHM
+""" BUCKET SORT ALGORITHM """
 
-#Dictionaries for conversion
-Co = {'BLUE':1, 'GREEN':2, 'INDIGO':3, 'ORANGE':4, 'RED':5, 'VIOLET':6, 'YELLOW':7}
-S = {'L':1, 'M':2, 'S':3, 'XL':4, 'XS':5, 'XXL':6, 'XXXL':7}
-F = {'CASHMERE':1, 'COTTON':2, 'LINEN':3, 'POLYESTER':4, 'RAYON':5, 'SILK':6, 'WOOL':7}
+#Dictionaries for conversion - ASC order
+colors = {'BLUE':1, 'GREEN':2, 'INDIGO':3, 'ORANGE':4, 'RED':5, 'VIOLET':6, 'YELLOW':7}
+sizes = {'L':1, 'M':2, 'S':3, 'XL':4, 'XS':5, 'XXL':6, 'XXXL':7}
+fabrics = {'CASHMERE':1, 'COTTON':2, 'LINEN':3, 'POLYESTER':4, 'RAYON':5, 'SILK':6, 'WOOL':7}
 
-def bucketSort(myList,p,ch):    #p:Position of inner list, ch:Choice of type ascending/descending
-
+def bucket_sort(myList, attr_as_str, ch):    #attr_as_str: Attribute of object as string, ch: Choice of type ascending/descending
+                                
     tempList = []
-    #Fill the tempList with values of position "p" 
+    #Fill the tempList with values of objects' attributes "attr_as_str"  
     for i in range(len(myList)):
-        tempList.append(myList[i][p])
+        tempList.append(getattr(myList[i], attr_as_str))
 
-    if(p==0):
+    if attr_as_str == 'color':
         #Convert strings-colors to numbers
         for i in range(len(tempList)):
-            for x in Co:
+            for x in colors:
                 if tempList[i] == x:
-                    tempList[i] = Co.get(x)
+                    tempList[i] = colors.get(x)
     
-        tempListSort(tempList,ch)           #Sort tempListSort ASC or DESC
+        tempListSort(tempList, ch)                          #Sort tempListSort ASC or DESC
 
         #Convert numbers to strings-colors
         for i in range(len(tempList)):
-            for x in Co:
-                if tempList[i] == Co.get(x):
+            for x in colors:
+                if tempList[i] == colors.get(x):
                     tempList[i] = x
 
-        myListSort(myList,tempList,p,ch)   #Sort tempListSort ASC or DESC
+        myListSort(myList, tempList, attr_as_str, ch)       #Sort myListSort ASC or DESC
 
-    elif(p==1):
+    elif attr_as_str == 'size':
         #Convert strings-sizes to numbers
         for i in range(len(tempList)):
-            for x in S:
+            for x in sizes:
                 if tempList[i] == x:
-                    tempList[i] = S.get(x)
+                    tempList[i] = sizes.get(x)
 
-        tempListSort(tempList,ch)
+        tempListSort(tempList, ch)
 
         #Convert numbers to strings-sizes
         for i in range(len(tempList)):
-            for x in S:
-                if tempList[i] == S.get(x):
+            for x in sizes:
+                if tempList[i] == sizes.get(x):
                     tempList[i] = x
                     
-        myListSort(myList,tempList,p,ch)
+        myListSort(myList, tempList, attr_as_str, ch)
 
     else:
         #Convert strings-fabrics to numbers
         for i in range(len(tempList)):
-            for x in F:
+            for x in fabrics:
                 if tempList[i] == x:
-                    tempList[i] = F.get(x)
+                    tempList[i] = fabrics.get(x)
         
-        tempListSort(tempList,ch)
+        tempListSort(tempList, ch)
 
         #Convert numbers to strings-fabrics
         for i in range(len(tempList)):
-            for x in F:
-                if tempList[i] == F.get(x):
+            for x in fabrics:
+                if tempList[i] == fabrics.get(x):
                     tempList[i] = x
         
-        myListSort(myList,tempList,p,ch)
+        myListSort(myList, tempList, attr_as_str, ch)
         
 
-def tempListSort(tempList,ch):
+def tempListSort(tempList, ch):
 
     #Create buckets
     bucket = [None] * (max(tempList) + 1)
@@ -96,13 +96,13 @@ def tempListSort(tempList,ch):
                 outPos -= 1
     
 
-def myListSort(myList,tempList,p,ch):
+def myListSort(myList, tempList, attr_as_str, ch):
     
     #Color or Size or Fabric in ASC/DESC
     a=0
     for i in range(len(tempList)-1):
         for j in range(a, len(myList)):
-            if (tempList[i] == myList[j][p]):
+            if tempList[i] == getattr(myList[j], attr_as_str):
                 myList[i], myList[j] = myList[j], myList[i]
                 a += 1
                 break
@@ -115,72 +115,72 @@ def myListSort(myList,tempList,p,ch):
 
                 if (ch=="1" or ch=="3" or ch=="5"): #ASC
 
-                    if p==0: 
+                    if attr_as_str == 'color': 
 
                         #Color/Size
-                        if myList[i][1] > myList[j][1]:
+                        if myList[i].size > myList[j].size:
                             myList[i], myList[j] = myList[j], myList[i]
 
                         #Color/Size/Fabric
-                        elif myList[i][1] == myList[j][1]:
-                            if myList[i][2] > myList[j][2]:
+                        elif myList[i].size == myList[j].size:
+                            if myList[i].fabric > myList[j].fabric:
                                 myList[i], myList[j] = myList[j], myList[i]
                     
-                    elif p==1:
+                    elif attr_as_str == 'size':
 
                         #Size/Fabric
-                        if myList[i][2] > myList[j][2]:
+                        if myList[i].fabric > myList[j].fabric:
                             myList[i], myList[j] = myList[j], myList[i]
 
                         #Size/Fabric/Color
-                        elif myList[i][2] == myList[j][2]:
-                            if myList[i][0] > myList[j][0]:
+                        elif myList[i].fabric == myList[j].fabric:
+                            if myList[i].color > myList[j].color:
                                 myList[i], myList[j] = myList[j], myList[i]
 
                     else:
 
                         #Fabric/Color
-                        if myList[i][0] > myList[j][0]:
+                        if myList[i].color > myList[j].color:
                             myList[i], myList[j] = myList[j], myList[i]
 
                         #Fabric/Color/Size
-                        elif myList[i][0] == myList[j][0]:
-                            if myList[i][1] > myList[j][1]:
+                        elif myList[i].color == myList[j].color:
+                            if myList[i].size > myList[j].size:
                                 myList[i], myList[j] = myList[j], myList[i]
 
-                else:
+                else:   #DESC
 
-                    if p==0: 
+                    if attr_as_str == 'color': 
 
                         #Color/Size
-                        if myList[i][1] < myList[j][1]:
+                        if myList[i].size < myList[j].size:
                             myList[i], myList[j] = myList[j], myList[i]
 
                         #Color/Size/Fabric
-                        elif myList[i][1] == myList[j][1]:
-                            if myList[i][2] < myList[j][2]:
+                        elif myList[i].size == myList[j].size:
+                            if myList[i].fabric < myList[j].fabric:
                                 myList[i], myList[j] = myList[j], myList[i]
                     
-                    elif p==1:
+                    elif attr_as_str == 'size':
 
                         #Size/Fabric
-                        if myList[i][2] < myList[j][2]:
+                        if myList[i].fabric < myList[j].fabric:
                             myList[i], myList[j] = myList[j], myList[i]
 
                         #Size/Fabric/Color
-                        elif myList[i][2] == myList[j][2]:
-                            if myList[i][0] < myList[j][0]:
+                        elif myList[i].fabric == myList[j].fabric:
+                            if myList[i].color < myList[j].color:
                                 myList[i], myList[j] = myList[j], myList[i]
 
                     else:
 
                         #Fabric/Color
-                        if myList[i][0] < myList[j][0]:
+                        if myList[i].color < myList[j].color:
                             myList[i], myList[j] = myList[j], myList[i]
 
                         #Fabric/Color/Size
-                        elif myList[i][0] == myList[j][0]:
-                            if myList[i][1] < myList[j][1]:
+                        elif myList[i].color == myList[j].color:
+                            if myList[i].size < myList[j].size:
                                 myList[i], myList[j] = myList[j], myList[i]
 
             else:
